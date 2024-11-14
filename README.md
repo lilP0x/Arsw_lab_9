@@ -204,31 +204,83 @@ newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALAN
 **Preguntas**
 1. ¿Cuáles son los tipos de balanceadores de carga en Azure y en qué se diferencian?, ¿Qué es SKU, qué tipos hay y en qué se diferencian?, ¿Por qué el balanceador de carga necesita una IP pública?
 
-### Tipos de Balanceadores de Carga
-
-   - Azure Load Balancer: Es un balanceador de carga de capa 4 (transporte), que distribuye el tráfico de red entrante hacia máquinas virtuales dentro de un conjunto de             disponibilidad o a través de instancias de backend.
-
-   - Classic Load Balancer: Es la versión anterior, con menos características de escalabilidad y seguridad.
-  
-   - Standard Load Balancer: Es la versión más avanzada, con características de alta disponibilidad, mejor escalabilidad, soporte de reglas de NAT y un mayor control.
-  
-   - Application Gateway: Este balanceador de carga opera en la capa 7 (aplicación), y es adecuado para aplicaciones web. Ofrece características adicionales como la terminación SSL, el redireccionamiento de URL y el enrutamiento basado en URL.
-   
-   - Azure Traffic Manager: Es un balanceador de carga global que distribuye el tráfico entre diferentes regiones de Azure. Está basado en DNS y permite el enrutamiento de 
-   tráfico según la proximidad geográfica, el rendimiento, la disponibilidad o las políticas personalizadas.
-
-### Tipos de SKU
-SKU (Stock Keeping Unit) es un identificador que se usa para especificar la configuración y características de un servicio en Azure. Existen dos tipos principales de SKU en servicios como el Load Balancer:
-
-- Basic SKU: Tiene funcionalidades más limitadas y está diseñado para cargas más ligeras.
-- Standard SKU: Proporciona una mayor escalabilidad, características de seguridad mejoradas, y es recomendado para aplicaciones de mayor escala y más exigentes.
+      ### Tipos de Balanceadores de Carga
+      
+         - Azure Load Balancer: Es un balanceador de carga de capa 4 (transporte), que distribuye el tráfico de red entrante hacia máquinas virtuales dentro de un conjunto de             disponibilidad o a través de instancias de backend.
+      
+         - Classic Load Balancer: Es la versión anterior, con menos características de escalabilidad y seguridad.
+        
+         - Standard Load Balancer: Es la versión más avanzada, con características de alta disponibilidad, mejor escalabilidad, soporte de reglas de NAT y un mayor control.
+        
+         - Application Gateway: Este balanceador de carga opera en la capa 7 (aplicación), y es adecuado para aplicaciones web. Ofrece características adicionales como la terminación SSL, el redireccionamiento de URL y el enrutamiento basado en URL.
+         
+         - Azure Traffic Manager: Es un balanceador de carga global que distribuye el tráfico entre diferentes regiones de Azure. Está basado en DNS y permite el enrutamiento de 
+         tráfico según la proximidad geográfica, el rendimiento, la disponibilidad o las políticas personalizadas.
+      
+      ### Tipos de SKU
+      SKU (Stock Keeping Unit) es un identificador que se usa para especificar la configuración y características de un servicio en Azure. Existen dos tipos principales de SKU en servicios como el Load Balancer:
+      
+      - Basic SKU: Tiene funcionalidades más limitadas y está diseñado para cargas más ligeras.
+      - Standard SKU: Proporciona una mayor escalabilidad, características de seguridad mejoradas, y es recomendado para aplicaciones de mayor escala y más exigentes.
+        
+        ###  IP pública en balanceador de carga
+        El balanceador de carga necesita una IP pública para permitir el acceso desde el exterior (Internet) hacia los recursos de backend de Azure. La IP pública se asocia con la entrada de tráfico, que luego se distribuye de manera equitativa entre las instancias de backend a través de las reglas de balanceo de carga.
+        
      
-* ¿Cuál es el propósito del *Backend Pool*?
-* ¿Cuál es el propósito del *Health Probe*?
-* ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
-* ¿Qué es una *Virtual Network*? ¿Qué es una *Subnet*? ¿Para qué sirven los *address space* y *address range*?
-* ¿Qué son las *Availability Zone* y por qué seleccionamos 3 diferentes zonas?. ¿Qué significa que una IP sea *zone-redundant*?
-* ¿Cuál es el propósito del *Network Security Group*?
+2. ¿Cuál es el propósito del *Backend Pool*?
+   
+      El Backend Pool es un grupo de recursos, como máquinas virtuales, instancias de contenedor, o instancias de servicio, que recibirán el tráfico balanceado por el Load Balancer. Cada una de estas instancias recibirá una parte del tráfico que el balanceador distribuye.
+
+   
+3. ¿Cuál es el propósito del *Health Probe*?
+
+      El Health Probe verifica el estado de salud de las instancias de backend del pool. Si una instancia no pasa la prueba de salud, el balanceador de carga deja de enviar tráfico a esa instancia hasta que vuelva a estar saludable. Esto garantiza que solo las instancias operativas reciban tráfico.
+
+
+4. ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
+
+      ###proposito
+      
+      La Load Balancing Rule define cómo se distribuirá el tráfico entre las instancias del Backend Pool. Esta regla establece cómo los puertos de entrada se deben redirigir a las instancias de backend y qué tipo de tráfico debe ser balanceado.
+      
+      ### tipos de sesión persistente
+      
+      - Sticky Sessions (Session Affinity): Asegura que una vez que un cliente se conecta a una instancia de backend, todo su tráfico posterior se dirige a la misma instancia.
+      - Non-sticky Sessions: El tráfico se distribuye de manera aleatoria entre todas las instancias.
+      
+        Importancia y escalabilidad:
+      
+      Las sesiones persistentes son necesarias para aplicaciones que requieren que un cliente interactúe con la misma instancia a lo largo de una sesión. Esto puede afectar la escalabilidad, ya que si un solo servidor recibe un tráfico excesivo debido a la afinidad de sesión, el sistema podría volverse menos eficiente.
+
+5. ¿Qué es una *Virtual Network*? ¿Qué es una *Subnet*? ¿Para qué sirven los *address space* y *address range*?
+
+      ### Virtual Network
+      
+      Una Virtual Network es un espacio aislado dentro de Azure que proporciona comunicación privada entre los recursos de Azure. Se puede configurar subredes, control de tráfico y reglas de seguridad dentro de una VNet.
+      
+      ### Subnet
+      
+      Una Subnet es una división dentro de una VNet que organiza los recursos en segmentos más pequeños y facilita el control del tráfico entre diferentes partes de la red.
+      
+      ### address
+      - Address Space: Es el rango de direcciones IP que se puede usar dentro de una VNet.
+      - Address Range: Especifica el rango de direcciones IP que se asignan a cada Subnet dentro de la VNet.
+
+6. ¿Qué son las *Availability Zone* y por qué seleccionamos 3 diferentes zonas?. ¿Qué significa que una IP sea *zone-redundant*?
+   
+      ### Availability Zone
+      
+      Las Availability Zones son ubicaciones físicas dentro de una región de Azure que están separadas y tienen su propia infraestructura de energía, redes y refrigeración. Se seleccionan tres zonas para garantizar la alta disponibilidad y resiliencia de la infraestructura. Si una zona falla, las otras dos continúan operando, evitando la interrupción de los servicios.
+      
+      ### Ip zone-redundant
+      
+      es una IP que se distribuye a través de múltiples zonas de disponibilidad, lo que garantiza que la dirección IP siga siendo accesible incluso si una zona de disponibilidad se ve afectada.
+
+
+7. ¿Cuál es el propósito del *Network Security Group*?
+
+      es un conjunto de reglas de seguridad que controla el acceso a los recursos dentro de una red virtual. Puedes definir reglas para permitir o denegar tráfico entrante y saliente según direcciones IP, puertos y protocolos.
+
 * Informe de newman 1 (Punto 2)
 * Presente el Diagrama de Despliegue de la solución.
 
