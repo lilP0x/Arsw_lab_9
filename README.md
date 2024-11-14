@@ -202,8 +202,27 @@ newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALAN
 ```
 
 **Preguntas**
+1. ¿Cuáles son los tipos de balanceadores de carga en Azure y en qué se diferencian?, ¿Qué es SKU, qué tipos hay y en qué se diferencian?, ¿Por qué el balanceador de carga necesita una IP pública?
 
-* ¿Cuáles son los tipos de balanceadores de carga en Azure y en qué se diferencian?, ¿Qué es SKU, qué tipos hay y en qué se diferencian?, ¿Por qué el balanceador de carga necesita una IP pública?
+### Tipos de Balanceadores de Carga
+
+   - Azure Load Balancer: Es un balanceador de carga de capa 4 (transporte), que distribuye el tráfico de red entrante hacia máquinas virtuales dentro de un conjunto de             disponibilidad o a través de instancias de backend.
+
+   - Classic Load Balancer: Es la versión anterior, con menos características de escalabilidad y seguridad.
+  
+   - Standard Load Balancer: Es la versión más avanzada, con características de alta disponibilidad, mejor escalabilidad, soporte de reglas de NAT y un mayor control.
+  
+   - Application Gateway: Este balanceador de carga opera en la capa 7 (aplicación), y es adecuado para aplicaciones web. Ofrece características adicionales como la terminación SSL, el redireccionamiento de URL y el enrutamiento basado en URL.
+   
+   - Azure Traffic Manager: Es un balanceador de carga global que distribuye el tráfico entre diferentes regiones de Azure. Está basado en DNS y permite el enrutamiento de 
+   tráfico según la proximidad geográfica, el rendimiento, la disponibilidad o las políticas personalizadas.
+
+### Tipos de SKU
+SKU (Stock Keeping Unit) es un identificador que se usa para especificar la configuración y características de un servicio en Azure. Existen dos tipos principales de SKU en servicios como el Load Balancer:
+
+- Basic SKU: Tiene funcionalidades más limitadas y está diseñado para cargas más ligeras.
+- Standard SKU: Proporciona una mayor escalabilidad, características de seguridad mejoradas, y es recomendado para aplicaciones de mayor escala y más exigentes.
+     
 * ¿Cuál es el propósito del *Backend Pool*?
 * ¿Cuál es el propósito del *Health Probe*?
 * ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
