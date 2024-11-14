@@ -27,14 +27,19 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 
 ![Imágen 1](images/part1/part1-vm-basic-config.png)
 
+https://github.com/lilP0x/Arsw_lab_9/blob/main/images/lab/maquina_creada.jpg
+
 2. Para conectarse a la VM use el siguiente comando, donde las `x` las debe remplazar por la IP de su propia VM (Revise la sección "Connect" de la virtual machine creada para tener una guía más detallada).
 
     `ssh scalability_lab@xxx.xxx.xxx.xxx`
 
     [Imagen 2](images/lab/conectando_maquina.jpg)
+   
+https://github.com/lilP0x/Arsw_lab_9/blob/main/images/lab/conectando_maquina.jpg
+   
 
-3. Instale node, para ello siga la sección *Installing Node.js and npm using NVM* que encontrará en este [enlace](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/).
-4. Para instalar la aplicación adjunta al Laboratorio, suba la carpeta `FibonacciApp` a un repositorio al cual tenga acceso y ejecute estos comandos dentro de la VM:
+4. Instale node, para ello siga la sección *Installing Node.js and npm using NVM* que encontrará en este [enlace](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/).
+5. Para instalar la aplicación adjunta al Laboratorio, suba la carpeta `FibonacciApp` a un repositorio al cual tenga acceso y ejecute estos comandos dentro de la VM:
 
     `git clone <your_repo>`
 
@@ -42,7 +47,7 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 
     `npm install`
 
-5. Para ejecutar la aplicación puede usar el comando `npm FibinacciApp.js`, sin embargo una vez pierda la conexión ssh la aplicación dejará de funcionar. Para evitar ese compartamiento usaremos *forever*. Ejecute los siguientes comando dentro de la VM.
+6. Para ejecutar la aplicación puede usar el comando `npm FibinacciApp.js`, sin embargo una vez pierda la conexión ssh la aplicación dejará de funcionar. Para evitar ese compartamiento usaremos *forever*. Ejecute los siguientes comando dentro de la VM.
 
     ` node FibonacciApp.js`
 
@@ -50,7 +55,7 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 
     [](images/lab/usando_la_app.jpg)
 
-6. Antes de verificar si el endpoint funciona, en Azure vaya a la sección de *Networking* y cree una *Inbound port rule* tal como se muestra en la imágen. Para verificar que la aplicación funciona, use un browser y user el endpoint `http://xxx.xxx.xxx.xxx:3000/fibonacci/6`. La respuesta debe ser `The answer is 8`.
+7. Antes de verificar si el endpoint funciona, en Azure vaya a la sección de *Networking* y cree una *Inbound port rule* tal como se muestra en la imágen. Para verificar que la aplicación funciona, use un browser y user el endpoint `http://xxx.xxx.xxx.xxx:3000/fibonacci/6`. La respuesta debe ser `The answer is 8`.
 
 ![](images/part1/part1-vm-3000InboudRule.png)
 
@@ -69,9 +74,12 @@ Ahora usaremos http para verificar el endpoint
     * 1080000
     * 1090000
 
-    podemos ver que con estas consultas la mmaquina se demora mucho en realizar una respuesta.    
+    podemos ver que con estas consultas la mmaquina se demora mucho en realizar una respuesta.
+   
+https://github.com/lilP0x/Arsw_lab_9/blob/main/images/lab/usando_la_app.jpg
+    
 
-8. Dírijase ahora a Azure y verifique el consumo de CPU para la VM. (Los resultados pueden tardar 5 minutos en aparecer).
+9. Dírijase ahora a Azure y verifique el consumo de CPU para la VM. (Los resultados pueden tardar 5 minutos en aparecer).
 
 ![Imágen 2](images/part1/part1-vm-cpu.png)
 
@@ -137,14 +145,37 @@ Ahora usaremos http para verificar el endpoint
    la creacion de *Inbound port rule*  permite explícitamente el tráfico en los puertos que el servicio utiliza. Las reglas de entrada permiten establecer qué tráfico puede       acceder a la VM.
    
 4. Adjunte tabla de tiempos e interprete por qué la función tarda tando tiempo.
+
+https://github.com/lilP0x/Arsw_lab_9/blob/main/images/lab/empeora_app.jpg
+
 5. Adjunte imágen del consumo de CPU de la VM e interprete por qué la función consume esa cantidad de CPU.
+
+https://github.com/lilP0x/Arsw_lab_9/blob/main/images/lab/uso%20de%20cpu.jpg
+
 6. Adjunte la imagen del resumen de la ejecución de Postman. Interprete:
-    * Tiempos de ejecución de cada petición.
-    * Si hubo fallos documentelos y explique.
+
+https://github.com/lilP0x/Arsw_lab_9/blob/main/images/lab/registros_app.jpg
+
 7. ¿Cuál es la diferencia entre los tamaños `B2ms` y `B1ls` (no solo busque especificaciones de infraestructura)?
+
+      Las máquinas virtuales B1ls y B2ms de Azure pertenecen a la serie B, diseñada para cargas de trabajo de bajo costo y rendimiento intermitente. B1ls cuenta con 1 vCPU y 0.5 GB de RAM, lo que lo hace adecuado para aplicaciones extremadamente ligeras, servidores de prueba y entornos de desarrollo con bajo uso de recursos. Su capacidad de almacenamiento de créditos de CPU es baja, por lo que está limitado para ráfagas de alto rendimiento sostenido.
+      
+      Por otro lado, B2ms ofrece 2 vCPU y 8 GB de RAM, lo que permite manejar aplicaciones con requerimientos de memoria y procesamiento moderados, como sitios web de tráfico medio o pequeñas bases de datos. Puede acumular y utilizar más créditos de CPU, lo que le da una mayor capacidad para responder a picos de carga, siendo más versátil para aplicaciones con demanda intermitente o moderada. Cambiar de B1ls a B2ms mejora el rendimiento de manera significativa en escenarios que requieren más recursos de memoria y CPU.
+
 8. ¿Aumentar el tamaño de la VM es una buena solución en este escenario?, ¿Qué pasa con la FibonacciApp cuando cambiamos el tamaño de la VM?
+
+      Incrementar el tamaño de la máquina virtual (VM) podría ser útil en parte, ya que proporcionaría más capacidad de CPU y memoria, ayudando así a manejar mejor las peticiones de la FibonacciApp. Pero esta mejora es limitada. porque la FibonacciApp calcula los números de Fibonacci de forma secuencial e iterativa, lo que demanda un uso intensivo de la CPU, sobre todo cuando se trata de números altos en la secuencia.
+      
+      Al cambiar a una VM más potente, como una B2ms en lugar de una B1ls, la aplicación responde más rápido y soporta mejor las cargas, ya que el aumento de vCPUs y RAM reduce el tiempo de cada cálculo. Sin embargo, el problema de fondo persiste: la aplicación continuará necesitando muchos recursos de CPU para cada cálculo de Fibonacci de mayor tamaño. Esto significa que, si hay solicitudes simultáneas o valores altos de n, el rendimiento de la aplicación podría verse afectado
+
 9. ¿Qué pasa con la infraestructura cuando cambia el tamaño de la VM? ¿Qué efectos negativos implica?
+
+      Cambiar una máquina virtual en Azure de B1ls a B2ms puede traer algunos inconvenientes. Para empezar, hacer el cambio casi siempre implica reiniciar la VM, lo que podría causar una pequeña interrupción en el servicio y afectar la disponibilidad de la aplicación. Además, ciertas configuraciones de red, como las IP estáticas o algunos ajustes específicos, podrían necesitar revisión y ajustes para que todo funcione bien después del cambio. También es importante considerar que los costos operativos subirán, ya que la B2ms es más cara que la B1ls. Por eso, es mejor hacer el cambio en horas de baja demanda para minimizar estos posibles problemas.
+
 10. ¿Hubo mejora en el consumo de CPU o en los tiempos de respuesta? Si/No ¿Por qué?
+
+      Al cambiar a una instancia B2ms, se nota una mejora bastante grande en el rendimiento de la CPU y en los tiempos de respuesta. La B2ms tiene más recursos que la B1ls, como más capacidad de CPU, RAM y almacenamiento. Con más núcleos de CPU y más memoria, esta máquina virtual puede manejar trabajos más pesados y procesar las solicitudes más rápido, lo que se traduce en un mejor rendimiento, tiempos de respuesta más cortos y una mayor capacidad para gestionar varias solicitudes al mismo tiempo.
+
 11. Aumente la cantidad de ejecuciones paralelas del comando de postman a `4`. ¿El comportamiento del sistema es porcentualmente mejor?
 
 ### Parte 2 - Escalabilidad horizontal
