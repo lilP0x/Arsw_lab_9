@@ -23,11 +23,15 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
     * Username = scalability_lab
     * SSH publi key = Su llave ssh publica
 
+    [](images/lab/maquina_creada.jpg)
+
 ![Imágen 1](images/part1/part1-vm-basic-config.png)
 
 2. Para conectarse a la VM use el siguiente comando, donde las `x` las debe remplazar por la IP de su propia VM (Revise la sección "Connect" de la virtual machine creada para tener una guía más detallada).
 
     `ssh scalability_lab@xxx.xxx.xxx.xxx`
+
+    [Imagen 2](images/lab/conectando_maquina.jpg)
 
 3. Instale node, para ello siga la sección *Installing Node.js and npm using NVM* que encontrará en este [enlace](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/).
 4. Para instalar la aplicación adjunta al Laboratorio, suba la carpeta `FibonacciApp` a un repositorio al cual tenga acceso y ejecute estos comandos dentro de la VM:
@@ -42,9 +46,16 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 
     ` node FibonacciApp.js`
 
+    Despues de ejecutar este comando podremos hacer las peticiones que se veran de la siguiente manera
+
+    [](images/lab/usando_la_app.jpg)
+
 6. Antes de verificar si el endpoint funciona, en Azure vaya a la sección de *Networking* y cree una *Inbound port rule* tal como se muestra en la imágen. Para verificar que la aplicación funciona, use un browser y user el endpoint `http://xxx.xxx.xxx.xxx:3000/fibonacci/6`. La respuesta debe ser `The answer is 8`.
 
 ![](images/part1/part1-vm-3000InboudRule.png)
+
+Ahora usaremos http para verificar el endpoint 
+
 
 7. La función que calcula en enésimo número de la secuencia de Fibonacci está muy mal construido y consume bastante CPU para obtener la respuesta. Usando la consola del Browser documente los tiempos de respuesta para dicho endpoint usando los siguintes valores:
     * 1000000
@@ -56,11 +67,14 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
     * 1060000
     * 1070000
     * 1080000
-    * 1090000    
+    * 1090000
+
+    podemos ver que con estas consultas la mmaquina se demora mucho en realizar una respuesta.    
 
 8. Dírijase ahora a Azure y verifique el consumo de CPU para la VM. (Los resultados pueden tardar 5 minutos en aparecer).
 
 ![Imágen 2](images/part1/part1-vm-cpu.png)
+
 
 9. Ahora usaremos Postman para simular una carga concurrente a nuestro sistema. Siga estos pasos.
     * Instale newman con el comando `npm install newman -g`. Para conocer más de Newman consulte el siguiente [enlace](https://learning.getpostman.com/docs/postman/collection-runs/command-line-integration-with-newman/).
@@ -73,13 +87,29 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
     newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10
     ```
 
+    [](images/lab/registros_app.jpg)
+
 10. La cantidad de CPU consumida es bastante grande y un conjunto considerable de peticiones concurrentes pueden hacer fallar nuestro servicio. Para solucionarlo usaremos una estrategia de Escalamiento Vertical. En Azure diríjase a la sección *size* y a continuación seleccione el tamaño `B2ms`.
 
 ![Imágen 3](images/part1/part1-vm-resize.png)
 
+
+[](images/lab/uso%20de%20cpu.jpg)
+
+
+[](images/lab/escalando_vertical.jpg)
+
 11. Una vez el cambio se vea reflejado, repita el paso 7, 8 y 9.
+[](images/lab/cambio_de_tamaño.jpg)
+
 12. Evalue el escenario de calidad asociado al requerimiento no funcional de escalabilidad y concluya si usando este modelo de escalabilidad logramos cumplirlo.
+    podemos ver como la mejoria es bastante notable ya que en un principio aparecian los registros despues de 14 segundos y despues de hacer un escalamiento ahora solo se demora 10
+    [](images/lab/registros_get.jpg)
+
+
 13. Vuelva a dejar la VM en el tamaño inicial para evitar cobros adicionales.
+
+[](images/lab/escalando_vertical.jpg)
 
 **Preguntas**
 
