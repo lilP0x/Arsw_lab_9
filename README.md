@@ -84,8 +84,28 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 **Preguntas**
 
 1. ¿Cuántos y cuáles recursos crea Azure junto con la VM?
+    se crean 7 recursos:
+      - Maquina virtial
+      - Red Virtual
+      - Interfaz de Red
+      - Disco de arranque
+      - Direccion ip publica
+      - Reglas de puerto
+
 2. ¿Brevemente describa para qué sirve cada recurso?
+   - VM: Ejecuta el sistema operativo y la aplicación.
+   - VNet y NIC: Permiten la comunicación entre la VM y otros servicios.
+   - OS Disk: Contiene el sistema operativo y archivos críticos.
+   - Dirección IP pública: Facilita el acceso remoto a la VM.
+   - Grupo de recursos: Organiza y gestiona todos los recursos relacionados.
+   - Reglas de puerto: Controlan qué tráfico se permite hacia la VM.
+
+
 3. ¿Al cerrar la conexión ssh con la VM, por qué se cae la aplicación que ejecutamos con el comando `npm FibonacciApp.js`? ¿Por qué debemos crear un *Inbound port rule* antes de acceder al servicio?
+
+   La aplicación se cae cuando se cierra la conexión SSH porque, en su forma predeterminada, los procesos en ejecución asociados a esa sesión de SSH se terminan. Si el comando    npm FibonacciApp.js no se ha configurado para ejecutarse en segundo plano, se detendrá al cerrarse la sesión SSH.
+   la creacion de *Inbound port rule*  permite explícitamente el tráfico en los puertos que el servicio utiliza. Las reglas de entrada permiten establecer qué tráfico puede       acceder a la VM.
+   
 4. Adjunte tabla de tiempos e interprete por qué la función tarda tando tiempo.
 5. Adjunte imágen del consumo de CPU de la VM e interprete por qué la función consume esa cantidad de CPU.
 6. Adjunte la imagen del resumen de la ejecución de Postman. Interprete:
